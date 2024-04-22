@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import { useState } from "react";
 import { postNewTask } from "../utils/axiosHelper";
 
 const initialState = {
@@ -7,7 +7,9 @@ const initialState = {
   hr: "",
   type: "entry",
 };
-export const Form = ({ addNewTask }) => {
+
+const ttHrPerWk = 24 * 7;
+export const Form = ({ fetchAllTasks, ttlHr }) => {
   //local state
   const [form, setForm] = useState(initialState);
   const [response, setRespons] = useState({});
@@ -26,24 +28,19 @@ export const Form = ({ addNewTask }) => {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
+    //decide
+
+    if (ttlHr + form.hr > ttHrPerWk) {
+      return alert("sorry Boss not enough hours left to fit this task");
+    }
 
     const result = await postNewTask(form);
     setRespons(result);
 
-    result.status === "success" && setForm(initialState);
-  };
-
-  const randomIdGenerator = () => {
-    const idLength = 6;
-    const str =
-      "qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM1234567890";
-
-    let id = "";
-    for (let i = 0; i < idLength; i++) {
-      const randomPosition = Math.floor(Math.random() * str.length);
-      id += str[randomPosition];
+    if (result.status === "success") {
+      setForm(initialState);
+      fetchAllTasks();
     }
-    return id;
   };
 
   return (

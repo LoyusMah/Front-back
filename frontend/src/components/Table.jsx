@@ -14,19 +14,19 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
         <table className="table table-striped table-hover border opacity">
           <tbody id="entry">
             {entries.map((item, i) => (
-              <tr key={i}>
+              <tr key={item._id}>
                 <td>{i + 1}</td>
                 <td>{item.task}</td>
                 <td>{item.hr}hrs</td>
                 <td className="text-end">
                   <button
-                    onClick={() => handOnDelete(item.id)}
+                    onClick={() => handOnDelete(item._id)}
                     className="btn btn-danger btn-sm"
                   >
                     <i className="fa-solid fa-trash"></i>
                   </button>
                   <button
-                    onClick={() => switchTask(item.id, "bad")}
+                    onClick={() => switchTask(item._id, "bad")}
                     className="btn btn-success btn-sm"
                   >
                     <i className="fa-sharp fa-solid fa-arrow-right-long"></i>
@@ -51,13 +51,13 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
                 <td>{item.hr}hrs</td>
                 <td className="text-end">
                   <button
-                    onClick={() => switchTask(item.id, "entry")}
+                    onClick={() => switchTask(item._id, "entry")}
                     className="btn btn-warning btn-sm"
                   >
                     <i className="fa-sharp fa-solid fa-arrow-left-long"></i>
                   </button>
                   <button
-                    onClick={() => handOnDelete(item.id)}
+                    onClick={() => handOnDelete(item._id)}
                     className="btn btn-danger btn-sm"
                   >
                     <i className="fa-solid fa-trash"></i>

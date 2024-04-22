@@ -14,13 +14,22 @@ let fakeDb = [];
 
 //get data
 router.get("/", async (req, res) => {
-  //db query to get the data
-  const tasks = await getTasks();
-  console.log(tasks);
-  res.json({
-    message: "Here are the tasks",
-    tasks,
-  });
+  try {
+    //db query to get the data
+    const tasks = await getTasks();
+    console.log(tasks);
+    res.json({
+      status: "success",
+      message: "Here are the tasks",
+      tasks,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message,
+      tasks,
+    });
+  }
 });
 
 //Post data
@@ -57,37 +66,41 @@ router.patch("/", async (req, res) => {
 
     result?._id
       ? res.json({
-          messaeg: "Your task has been updated",
+          status: "success",
+          message: "Your task has been updated",
         })
       : res.json({
-          messaeg: "No change made in the db, may be invalid data request",
+          status: "error",
+          message: "No change made in the db, may be invalid data request",
         });
   } catch (error) {
     // console.log(error);
     res.status(500).json({
+      status: "error",
       message: "something went wrong, try again later.",
     });
   }
 });
 //delete task
-router.delete("/:_id?", async (req, res) => {
+router.delete("/:_id", async (req, res) => {
   try {
-    const { _id } = req.body;
-
-    console.log(req.params);
+    const { _id } = req.params;
 
     const result = await delteTask(_id);
 
     result?._id
       ? res.json({
-          messaeg: "Your task has been Deleted",
+          status: "success",
+          message: "Your task has been Deleted",
         })
       : res.json({
-          messaeg: "Unable to delete, try again later",
+          status: "error",
+          message: "Unable to delete, try again later",
         });
   } catch (error) {
     console.log(error);
     res.status(500).json({
+      status: "error",
       message: "something went wrong, try again later.",
     });
   }
