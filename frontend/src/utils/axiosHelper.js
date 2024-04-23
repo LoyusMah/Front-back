@@ -29,9 +29,10 @@ export const getAllTasks = async () => {
   }
 };
 
-export const deleteTasks = async (_id) => {
+export const deleteTasks = async (ids) => {
   try {
-    const { data } = await axios.delete(apiEP + "/" + _id);
+    // const { data } = await axios.delete(apiEP + "/" + _id);
+    const { data } = await axios.delete(apiEP, { data: ids });
 
     return data;
   } catch (error) {

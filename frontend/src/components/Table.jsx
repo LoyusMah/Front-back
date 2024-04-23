@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { deleteTasks } from "../utils/axiosHelper";
 
-export const Table = ({ entryList, switchTask, handOnDelete }) => {
+export const Table = ({ entryList, switchTask, fetchAllTasks }) => {
   const [idsToDelete, setIdsToDelete] = useState([]);
 
   const entries = entryList.filter((item) => item.type === "entry");
@@ -29,6 +30,18 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
     checked
       ? setIdsToDelete([...idsToDelete, ...ids])
       : setIdsToDelete(idsToDelete.filter((id) => !ids.includes(id)));
+  };
+
+  const handOnDelete = async () => {
+    if (window.confirm("Are you sure, you want to delete the item?")) {
+      const { status, message } = await deleteTasks(idsToDelete);
+
+      if (status === "success") {
+        setIdsToDelete([]);
+        fetchAllTasks();
+        alert(message);
+      }
+    }
   };
 
   // if (value === "entry") {
@@ -163,9 +176,9 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
           </div>
         </div>
       </div>
-      {idsToDelete > 0 && (
+      {idsToDelete.length > 0 && (
         <div className="d-grid mb-3">
-          <button className="btn btn-danger btn-lg">
+          <button className="btn btn-danger btn-lg" onClick={handOnDelete}>
             <i className="fa-solid fa-trash"></i> Delete {idsToDelete.length}{" "}
             task(s)
           </button>
