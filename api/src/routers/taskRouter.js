@@ -8,8 +8,6 @@ import {
 } from "../models/task/TaskModel.js";
 const router = express.Router();
 
-let fakeDb = [];
-
 //controllers
 
 //get data
